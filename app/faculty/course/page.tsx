@@ -10,8 +10,14 @@ import { Course } from "@/util/types";
 import React from "react";
 
 export default async function CoursePage() {
-  const coursesRes = await fetch(`${process.env.API_BASE}/course?limit=all`);
-  const courses = (await coursesRes.json()) as Course[];
+  var courses: Course[] = [];
+
+  try {
+    const coursesRes = await fetch(`${process.env.API_BASE}/course?limit=all`);
+    courses = (await coursesRes.json()) as Course[];
+  } catch (err) {
+    console.error("Failed to get courses >", err);
+  }
 
   return (
     <div className="grid grid-cols-4 gap-4">

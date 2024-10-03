@@ -11,10 +11,16 @@ import { Research } from "@/util/types";
 import React from "react";
 
 export default async function ResearchPage() {
-  const resRes = await fetch(
-    `${process.env.API_BASE}/editorial-manager/submission`
-  );
-  const researches = (await resRes.json()) as Research[];
+  var researches: Research[] = [];
+  try {
+    const resRes = await fetch(
+      `${process.env.API_BASE}/editorial-manager/submission`
+    );
+
+    researches = (await resRes.json()) as Research[];
+  } catch (err) {
+    console.error("Failed to fetch researches >", err);
+  }
 
   return (
     <div className="grid grid-cols-2 gap-4">
