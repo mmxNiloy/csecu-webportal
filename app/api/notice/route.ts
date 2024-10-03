@@ -7,9 +7,11 @@ export async function GET(req: NextRequest) {
   const limit = req.nextUrl.searchParams.get("limit") ?? "10";
 
   const apiRes = await fetch(
-    `https://api.bike-csecu.com/api/notice?page=${page}&limit=${limit}`
+    `${process.env.API_BASE}/notice?page=${page}&limit=${limit}`
   );
-  return NextResponse.json(await apiRes.json(), { status: apiRes.status });
+  const res = await apiRes.json();
+  console.log("API Response", res);
+  return NextResponse.json(res, { status: apiRes.status });
 }
 
 export async function POST(req: NextRequest) {

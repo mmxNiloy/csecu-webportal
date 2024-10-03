@@ -37,30 +37,30 @@ export default function NavDrawer({ user }: { user: User }) {
     {
       title: "Manage Editorials",
       Icon: Icons.note,
-      ref: "https://ems.bike-csecu.com/",
+      ref: "http://bike-csecu.com:3010/",
       hidden: !user.teacher_id,
     },
     {
       title: "Withdraw Certificate",
       Icon: Icons.badgeCheck,
-      ref: "https://cwms.bike-csecu.com/",
+      ref: "http://bike-csecu.com:3020",
     },
     {
       title: "Manage Leave",
       Icon: Icons.logout,
-      ref: "https://lms.bike-csecu.com/",
+      ref: "http://bike-csecu.com:3030/",
       hidden: Boolean(user.student_id),
     },
     {
       title: "Manage Attendance",
       Icon: Icons.userCheck,
-      ref: "https://sas.bike-csecu.com/",
+      ref: "http://bike-csecu.com:3040/",
       hidden: !user.teacher_id,
     },
     {
       title: "Manage Teacher Information",
       Icon: Icons.teacher,
-      ref: "https://tims.bike-csecu.com/",
+      ref: "http://bike-csecu.com:3060/",
       hidden: Boolean(user.student_id),
     },
     {
@@ -71,31 +71,31 @@ export default function NavDrawer({ user }: { user: User }) {
     {
       title: "Manage Exam Renumerations",
       Icon: Icons.money,
-      ref: "https://aers.bike-csecu.com/",
+      ref: "http://bike-csecu.com:3080/",
       hidden: Boolean(user.student_id),
     },
     {
       title: "Manage Students",
       Icon: Icons.userCog,
-      ref: "https://sims.bike-csecu.com/",
+      ref: "http://bike-csecu.com:3090/",
       hidden: Boolean(user.student_id),
     },
     {
       title: "Process Results",
       Icon: Icons.fileCog,
-      ref: "https://rps.bike-csecu.com/",
+      ref: "http://bike-csecu.com:3100/",
       hidden: Boolean(user.student_id),
     },
     {
       title: "Manage Staff",
       Icon: Icons.userCog,
-      ref: "https://sis.bike-csecu.com/",
+      ref: "http://bike-csecu.com:3110/",
       hidden: Boolean(user.student_id),
     },
     {
       title: "Manage Meetings",
       Icon: Icons.users,
-      ref: "https://mms.bike-csecu.com/",
+      ref: "http://bike-csecu.com:3120/",
       hidden: Boolean(user.student_id),
     },
   ];

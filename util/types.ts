@@ -64,14 +64,32 @@ interface User {
   guardian_address?: Address;
 }
 
-interface Course {
-  course_id: number;
+interface Teacher {
+  user_id: string;
   department_id: number;
-  course_code: string;
-  course_title: string;
-  credit: number;
-  course_type: string;
-  exam_minutes: number;
+  teacher_id: number;
+  title: string;
+  designation: string;
+  area_of_interest: string;
+  title_bn: string;
+  designation_bn: string;
+  profile_image_id: number;
+  sign_id: number;
+  permanent_address_id: number;
+  email: string;
+  phone: string;
+  first_name_bn: string;
+  last_name_bn: string;
+  first_name: string;
+  last_name: string;
+  dob: string;
+  gender: string;
+  blood_group: string;
+  religion: string;
+  ethnicity: string;
+  nationality: string;
+  password: string;
+  present_address_id: number;
 }
 
 interface PaginatedResult {
@@ -272,6 +290,85 @@ interface UploadResponse {
   files: FileInfo[];
 }
 
+interface Course {
+  course_id: number;
+  department_id: number;
+  course_code: string;
+  course_title: string;
+  credit: number;
+  course_type: string;
+  exam_minutes: number;
+}
+
+export interface TeacherInfo {
+  personal_info: PersonalInfo;
+  education: Education[];
+  professional_experience: any[];
+  administrative_experience: any[];
+  scholarship_and_fellowship: any[];
+  accomplishment: any[];
+  training_and_certification: any[];
+  journal: any[];
+  publication: any[];
+  award: any[];
+  profile_image: ProfileImage;
+}
+
+export interface PersonalInfo {
+  user_id: string;
+  department_id: number;
+  teacher_id: number;
+  title: string;
+  designation: string;
+  area_of_interest: string;
+  title_bn: string;
+  designation_bn: string;
+  profile_image_id: number;
+  sign_id: number;
+  permanent_address_id: number;
+  email: string;
+  phone: string;
+  first_name_bn: string;
+  last_name_bn: string;
+  first_name: string;
+  last_name: string;
+  dob: string;
+  gender: string;
+  blood_group: string;
+  religion: string;
+  ethnicity: string;
+  nationality: string;
+  password: string;
+  present_address_id: number;
+}
+
+export interface Education {
+  user_id: string;
+  education_title: string;
+  education_institution: string;
+  education_from_year: string;
+  education_to_year: string;
+  education_country: string;
+}
+
+export interface ProfileImage {
+  image_id: number;
+  image_type: string;
+  image_path: any;
+  remote_image_url: string;
+}
+
+export interface Research {
+  submission_id: string;
+  initial_submission_id: any;
+  author_id: number;
+  status: string;
+  submission_date: string;
+  status_date: string;
+  paper_title: string;
+  keywords: string;
+}
+
 export type {
   Exam,
   PaginatedExam,
@@ -301,4 +398,5 @@ export type {
   UploadResponse,
   Evaluation,
   FormDetail,
+  Teacher,
 };

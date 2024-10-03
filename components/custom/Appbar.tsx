@@ -18,7 +18,7 @@ import { User } from "@/util/types";
 import { cookies } from "next/headers";
 import AuthguardNavDrawer from "./NavDrawer/AuthguardNavDrawer";
 
-export default async function Appbar() {
+export default async function Appbar({ user }: { user?: User }) {
   const userCookie = cookies().get(process.env.USER_COOKIE_KEY!);
   var user: User | undefined = undefined;
   console.log("Appbar.tsx > Session value", userCookie?.value);
@@ -37,6 +37,7 @@ export default async function Appbar() {
       user = res as User;
     } else {
       console.log("Appbar.tsx > User info not found >", await apiRes.json());
+      console.log("Appbar.tsx > User info not found > Status >", apiRes.status);
       user = undefined;
     }
   } catch (err) {
@@ -71,7 +72,7 @@ export default async function Appbar() {
           <NavigationMenuList>
             <NavigationMenuItem>
               <NavigationMenuLink
-                href="/notices"
+                href="/notice"
                 className={navigationMenuTriggerStyle()}
               >
                 Notices
@@ -82,13 +83,13 @@ export default async function Appbar() {
               <NavigationMenuTrigger>Faculty</NavigationMenuTrigger>
               <NavigationMenuContent>
                 <ul className="flex flex-col gap-3 p-6 w-96">
-                  <ListItem href="/faculty/teachers" title="Teachers">
+                  <ListItem href="/faculty/teacher" title="Teachers">
                     Discover our esteemed teachers and their incredible
                     expertise. Dive in to learn more about the brilliant minds
                     shaping our future!
                   </ListItem>
 
-                  <ListItem href="/faculty/courses" title="Courses">
+                  <ListItem href="/faculty/course" title="Courses">
                     Explore our diverse courses in programming, design,
                     management, and a vast array of computer science courses.
                   </ListItem>
@@ -97,26 +98,12 @@ export default async function Appbar() {
             </NavigationMenuItem>
 
             <NavigationMenuItem>
-              <NavigationMenuTrigger>Research</NavigationMenuTrigger>
-              <NavigationMenuContent>
-                <ul className="flex flex-col gap-3 p-6 w-96">
-                  <ListItem href="/research/publications" title="Publications">
-                    <Skeleton className="w-full h-8" />
-                  </ListItem>
-
-                  <ListItem href="/research/capstones" title="Capstones">
-                    <Skeleton className="w-full h-8" />
-                  </ListItem>
-
-                  <ListItem href="/research/projects" title="Projects">
-                    <Skeleton className="w-full h-8" />
-                  </ListItem>
-
-                  <ListItem href="/research/archive" title="Archive">
-                    <Skeleton className="w-full h-8" />
-                  </ListItem>
-                </ul>
-              </NavigationMenuContent>
+              <NavigationMenuLink
+                href="/research"
+                className={navigationMenuTriggerStyle()}
+              >
+                Research
+              </NavigationMenuLink>
             </NavigationMenuItem>
 
             <NavigationMenuItem>

@@ -1,30 +1,132 @@
-"use server";
-import React from "react";
-import { getNotices } from "../actions/getNotices";
-import { Notice } from "@/util/types";
+"use client";
 
-interface Props {
-  searchParams: {
-    [key: string]: string | string[] | undefined;
-  };
-}
+import NoticeCard from "@/components/custom/NoticeCard";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import Icons from "@/components/ui/icons";
+import {
+  Pagination,
+  PaginationContent,
+  PaginationEllipsis,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+} from "@/components/ui/pagination";
+import { Notice, PaginatedNotice } from "@/util/types";
+import { useSearchParams } from "next/navigation";
+import { Suspense, useCallback, useEffect, useState } from "react";
 
-export default async function NoticePage({ searchParams }: Props) {
-  const { limitParam, pageParam } = searchParams;
-  const limit = Number.parseInt((limitParam as string) ?? "5");
-  const page = Number.parseInt((pageParam as string) ?? "1");
+export default function NoticePage() {
+  const params = useSearchParams();
 
-  const paginatedNotices = await getNotices({ limit, page });
-  var notices: Notice[] = [];
-  if (paginatedNotices) {
-    notices = paginatedNotices.data;
-  }
+  const [notices, setNotices] = useState<PaginatedNotice>();
+  const [loading, setLoading] = useState<boolean>(false);
+  const [capPageIndex, setCapPageIndex] = useState<number>(1);
+  const [bracket, setBracket] = useState<number[]>([]);
+  const [currPage, setCurrPage] = useState<number>(1);
+
+  const getNotices = useCallback(async () => {
+    setLoading(true);
+
+    const page = Number.parseInt(params.get("page") ?? "1");
+    setCurrPage(page);
+
+    const apiRes = await fetch(`/api/notice?page=${page}&limit=10`);
+
+    if (apiRes.ok) {
+      const data = (await apiRes.json()) as PaginatedNotice;
+      setNotices(data);
+      const mCapPageIndex: number = Math.max(data.page_count - 4, 1);
+      const mBracket: number[] = Array.from(
+        { length: Math.min(5, data.page_count) },
+        (_, idx) => Math.min(page, mCapPageIndex) + idx
+      );
+
+      setCapPageIndex(mCapPageIndex);
+      setBracket(mBracket);
+    } else setNotices(undefined);
+
+    setLoading(false);
+  }, [params]);
+
+  useEffect(() => {
+    getNotices();
+  }, [getNotices]);
+
+  if (loading)
+    return (
+      <div className="w-full h-full flex items-center flex-col">
+        <Icons.spinner className="animate-spin" />
+        Loading...
+      </div>
+    );
+  if (!notices || notices.data.length <= 0)
+    return (
+      <div className="flex flex-col items-center justify-center text-center gap-1 h-32 w-full">
+        <Icons.rabbit size={32} />
+        No notices found!
+      </div>
+    );
 
   return (
-    <div>
-      {notices.map((notice) => (
-        <p key={notice.notice_id}>{notice.notice_title}</p>
-      ))}
-    </div>
+    <Card>
+      <CardHeader>
+        <CardTitle className="flex flex-row gap-1 md:gap-2">
+          <Icons.bell />
+          All Notices
+        </CardTitle>
+        <CardDescription>
+          Stay up-to-date with the academy activities.
+        </CardDescription>
+      </CardHeader>
+      <CardContent className="flex flex-col gap-1 md:gap-2">
+        {notices.data.map((notice) => (
+          <NoticeCard key={`notice-${notice.notice_id}`} notice={notice} />
+        ))}
+      </CardContent>
+      <CardFooter>
+        <Pagination>
+          <PaginationContent>
+            {notices.previous && (
+              <PaginationItem>
+                <PaginationPrevious href={`?page=${notices.previous.page}`} />
+              </PaginationItem>
+            )}
+            {bracket[0] > 1 && (
+              <PaginationItem>
+                <PaginationEllipsis />
+              </PaginationItem>
+            )}
+            {bracket.map((index) => (
+              <PaginationItem key={`pagination-page-${index}`}>
+                <PaginationLink
+                  isActive={currPage === index}
+                  href={`?page=${index}`}
+                >
+                  {index}
+                </PaginationLink>
+              </PaginationItem>
+            ))}
+            {currPage < capPageIndex && (
+              <PaginationItem>
+                <PaginationEllipsis />
+              </PaginationItem>
+            )}
+            {notices.next && (
+              <PaginationItem>
+                <PaginationNext href={`?page=${notices.next.page}`} />
+              </PaginationItem>
+            )}
+          </PaginationContent>
+        </Pagination>
+      </CardFooter>
+    </Card>
   );
 }
